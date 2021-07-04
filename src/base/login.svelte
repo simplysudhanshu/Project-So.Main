@@ -1,26 +1,20 @@
 <script>
-	import { auth } from "./firebase";
-	import { authState } from "rxfire/auth";
-	var username, password;
-	let user;
+	import { auth, fire_login } from "../tools/firebaseTools";
+	var username = null,
+		password = null;
+	let loginStatus = "";
 
-	function login_click() {
-		console.log("USERNAME: ", username);
-		console.log("PASSWORD: ", password);
+	function log_in() {
+		if (username !== null && password != null) {
+			fire_login(username, password).then(
+				(value) => (loginStatus = value)
+			);
+		}
+	}
 
-		auth.signInWithEmailAndPassword(username, password)
-			.then((userCredential) => {
-				// Signed in
-				var user = userCredential.user;
-				console.log("SIGNED in : ", user.uid)
-				// ...
-			})
-			.catch((error) => {
-				var errorCode = error.code;
-				var errorMessage = error.message;
-				console.log("FAIL : ", errorCode, errorMessage)
-			});
-
+	function log_out() {
+		auth.signOut();
+		loginStatus = "You have successfully logged OUT !";
 	}
 </script>
 
@@ -46,7 +40,9 @@
 		/>
 	</label>
 
-	<button type="submit" on:click={login_click}>Log in 🔒</button>
+	<button type="submit" on:click={log_in}>Log in</button>
+	<button type="submit" on:click={log_out}>Log out</button>
+	<p>{loginStatus}</p>
 </div>
 
 <style>

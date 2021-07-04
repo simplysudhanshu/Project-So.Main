@@ -1,8 +1,22 @@
 <script>
 	import {} from "node:os";
-	import { text } from "svelte/internal";
-	import LoginForm from "./login.svelte";
+  import { auth } from "./tools/firebaseTools";
+	import LoginForm from "./base/login.svelte";
 	
+  let currentUser;
+
+  $: console.log("CURRENT USER : ", currentUser);
+  auth.signOut()
+
+  auth.onAuthStateChanged(function (user) {
+		if (user) {
+			console.log("USER SIGNED in")
+		}
+		else{
+			console.log("USER SIGNED out")
+		}
+		currentUser = auth.currentUser;
+	});
 </script>
 
 <style>
