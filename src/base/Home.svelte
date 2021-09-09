@@ -1,26 +1,35 @@
 <script>
-	import { auth, fire_login } from "../tools/firebaseTools";
-	var username = null,
-		password = null;
-	let loginStatus = "";
+import { ObjectUnsubscribedError } from "rxjs";
 
+	import { fire_login, auth } from "../tools/firebaseTools";
+
+	var username = "shreemorayagosavirajpark2@gmail.com",
+		password = "admin-SMGRP2";
+	let loginStatus = false;
+	let userStatus = false;
+
+	auth.onAuthStateChanged(function (user) {
+	if (user) {
+		console.log("IN HOME: ", user)
+		userStatus = true
+		}
+	})
+$:console.log("HOME UserStatus : ", userStatus)
 	function log_in() {
 		if (username !== null && password != null) {
 			fire_login(username, password).then(
 				(value) => (loginStatus = value)
 			);
 		}
-	}
-
-	function log_out() {
-		auth.signOut();
-		loginStatus = "You have successfully logged OUT !";
+		console.log("HOME 2: ", userStatus)
+		if (userStatus) {
+			debugger
+			window.location = "/landing";
+		}
 	}
 </script>
 
 <div class="Form">
-	<h1>👤</h1>
-
 	<label
 		>Email
 		<input
@@ -41,7 +50,6 @@
 	</label>
 
 	<button type="submit" on:click={log_in}>Log in</button>
-	<button type="submit" on:click={log_out}>Log out</button>
 	<p>{loginStatus}</p>
 </div>
 
@@ -88,9 +96,5 @@
 	button:hover {
 		transform: translateY(-2.5px);
 		box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.58);
-	}
-	h1 {
-		margin: 10px 20px 30px 20px;
-		font-size: 40px;
 	}
 </style>

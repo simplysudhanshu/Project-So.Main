@@ -1,26 +1,11 @@
 <script>
 	import {} from "node:os";
-  import { auth } from "./tools/firebaseTools";
-	import LoginForm from "./base/login.svelte";
-	
-  let currentUser;
-
-  $: console.log("CURRENT USER : ", currentUser);
-  auth.signOut()
-
-  auth.onAuthStateChanged(function (user) {
-		if (user) {
-			console.log("USER SIGNED in")
-		}
-		else{
-			console.log("USER SIGNED out")
-		}
-		currentUser = auth.currentUser;
-	});
+  import { Router } from 'svelte-router-spa'
+  import { routes } from './tools/route'
 </script>
 
 <style>
-	section {
+	main {
     height: 100vh;
     width: 100%;
     display: flex;
@@ -30,7 +15,6 @@
   }	
 </style>
 
-<section>
-	<LoginForm />
-</section>
-  
+<main>
+  <Router {routes} />
+</main>
